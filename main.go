@@ -10,6 +10,9 @@ import (
 	"github.com/hako/durafmt"
 )
 
+const DATEFORMAT = "01-02-2006"
+const DATETIMEFORMAT = "01-02-2006 15:04"
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Include at least one date in the form of mm-dd-yyyy as a program argument")
@@ -31,13 +34,18 @@ func main() {
 
 			for y, s := range os.Args[1:] {
 				goterm.MoveCursor(1, y+3)
-				date, err := time.ParseInLocation("01-02-2006", s, t.Location())
+				format := DATEFORMAT
+				if len(s) == len(DATETIMEFORMAT) {
+					format = DATETIMEFORMAT
+				}
+				date, err := time.ParseInLocation(format, s, t.Location())
 				if err != nil {
-					_, _ = goterm.Printf("%s is not a date in the form of mm-dd-yyyy", s)
+					_, _ = goterm.Printf("%s is not a date in the form of mm-dd-yyyy or mm-dd-yyyy hh:mm", s)
 				}
 				diff := date.Sub(t)
-				_, _ = goterm.Printf("%v until %v", durafmt.Parse(diff).LimitFirstN(3), date.Format(time.ANSIC))
+				_, _ = goterm.Printf("%30v until %v    ", durafmt.Parse(diff).LimitFirstN(3), date.Format(time.ANSIC))
 			}
+			_, _ = goterm.Println()
 			goterm.Flush()
 		}
 	}()
