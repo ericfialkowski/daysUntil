@@ -43,7 +43,7 @@ func main() {
 					_, _ = goterm.Printf("%s is not a date in the form of mm-dd-yyyy or mm-dd-yyyy hh:mm", s)
 				}
 				diff := date.Sub(t)
-				_, _ = goterm.Printf("%30v until %v    ", durafmt.Parse(diff).LimitFirstN(3), date.Format(time.ANSIC))
+				_, _ = goterm.Printf("%30v until %v         ", durafmt.Parse(diff).LimitFirstN(3), date.Format(time.ANSIC))
 			}
 			_, _ = goterm.Println()
 			goterm.Flush()
