@@ -44,11 +44,21 @@ func main() {
 					y = y + 1
 					goterm.MoveCursor(1, y)
 					if err != nil {
-						_, _ = goterm.Printf("%s is not a date in the form of mm-dd-yyyy or mm-dd-yyyy hh:mm", s)
+						_, _ = goterm.Printf("%s is not a date in the form of mm-dd-yyyy or mm-dd-yyyy hh:mm\n", s)
+						goterm.Flush()
+						os.Exit(2)
 					}
 					diff := date.Sub(t)
 					_, _ = goterm.Printf("%30v until %v                  ", durafmt.Parse(diff).LimitFirstN(3), date.Format(time.ANSIC))
+					linesPrinted++
 				}
+			}
+
+			if linesPrinted == 0 {
+				goterm.MoveCursor(1, 3)
+				_, _ = goterm.Println("All dates have passed, exitting")
+				goterm.Flush()
+				os.Exit(0)
 			}
 
 			if linesPrinted > y {
