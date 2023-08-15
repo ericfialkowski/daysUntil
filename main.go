@@ -1,6 +1,7 @@
 package main
 
 import (
+	"daysUntil/keys"
 	"fmt"
 	"math/rand"
 	"os"
@@ -18,6 +19,8 @@ func main() {
 		fmt.Println("Include at least one date in the form of mm-dd-yyyy as a program argument")
 		os.Exit(1)
 	}
+
+	keys.ExitOnAnyKey()
 
 	ticker := time.NewTicker(1 * time.Second)
 
@@ -40,25 +43,29 @@ func main() {
 					format = DATETIMEFORMAT
 				}
 				date, err := time.ParseInLocation(format, s, t.Location())
-				if err != nil || date.After(time.Now()) {
-					y = y + 1
-					goterm.MoveCursor(1, y)
-					if err != nil {
-						_, _ = goterm.Printf("%s is not a date in the form of mm-dd-yyyy or mm-dd-yyyy hh:mm\n", s)
-						goterm.Flush()
-						os.Exit(2)
-					}
+				y = y + 1
+				goterm.MoveCursor(1, y)
+				if err != nil {
+					_, _ = goterm.Printf("%s is not a date in the form of mm-dd-yyyy or mm-dd-yyyy hh:mm\n", s)
+					goterm.Flush()
+					os.Exit(2)
+				}
+
+				c := date.Compare(t)
+
+				switch c {
+				case 1:
 					diff := date.Sub(t)
 					_, _ = goterm.Printf("%30v until %v                  ", durafmt.Parse(diff).LimitFirstN(3), date.Format(time.ANSIC))
 					linesPrinted++
+				case -1:
+					diff := t.Sub(date)
+					_, _ = goterm.Printf("%30v since %v                  ", durafmt.Parse(diff).LimitFirstN(3), date.Format(time.ANSIC))
+					linesPrinted++
+				case 0:
+					_, _ = goterm.Printf("%30v is now                  ", date.Format(time.ANSIC))
+					linesPrinted++
 				}
-			}
-
-			if linesPrinted == 0 {
-				goterm.MoveCursor(1, 3)
-				_, _ = goterm.Println("All dates have passed, exitting")
-				goterm.Flush()
-				os.Exit(0)
 			}
 
 			if linesPrinted > y {
