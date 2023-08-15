@@ -1,6 +1,6 @@
 # daysUntil
 
-This is a simple terminal tool for showing the time until a given date/time.
+This is a simple terminal tool for showing the time until or since a given date/time.
 
 ### Usage
 
@@ -16,6 +16,6 @@ Multiple dates can be passed in the command line. Acceptable formats are either:
 
 ### Notes
 
-- After a date has passed, it is removed from view
+- If the date is in the past, "day since" is display
 - A date without a time is calculated to the start of the day
 - Times are local
