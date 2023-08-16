@@ -3,12 +3,12 @@ package main
 import (
 	"daysUntil/keys"
 	"fmt"
+	"github.com/hako/durafmt"
 	"math/rand"
 	"os"
 	"time"
 
 	"github.com/buger/goterm"
-	"github.com/hako/durafmt"
 )
 
 const DATEFORMAT = "01-02-2006"
@@ -56,11 +56,11 @@ func main() {
 				switch c {
 				case 1:
 					diff := date.Sub(t)
-					_, _ = goterm.Printf("%30v until %v                  ", durafmt.Parse(diff).LimitFirstN(3), date.Format(time.ANSIC))
+					_, _ = goterm.Printf("%30v until %v                  ", durafmt.Parse(diff).LimitToUnit("days").LimitFirstN(3), date.Format(time.ANSIC))
 					linesPrinted++
 				case -1:
 					diff := t.Sub(date)
-					_, _ = goterm.Printf("%30v since %v                  ", durafmt.Parse(diff).LimitFirstN(3), date.Format(time.ANSIC))
+					_, _ = goterm.Printf("%30v since %v                  ", durafmt.Parse(diff).LimitToUnit("days").LimitFirstN(3), date.Format(time.ANSIC))
 					linesPrinted++
 				case 0:
 					_, _ = goterm.Printf("%30v is now                  ", date.Format(time.ANSIC))
